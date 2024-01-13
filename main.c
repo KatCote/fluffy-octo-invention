@@ -2,5 +2,5 @@
 
 int main()
 {
-    printf("Hello fluffy-octo-invention!\n");
+    printf("Hello cool fluffy-octo-invention!\n");
 }
