@@ -2,14 +2,6 @@
 #include "defines.h"
 #include "prototipes.h"
 
-struct point {
-    int x;
-    int y;
-
-    int connect[MAX_CONNECT];
-    int connections_count;
-};
-
 int main()
 {
 	initscr();
@@ -31,17 +23,7 @@ int main()
   int cur_point_x = p1.x;
   int cur_point_y = p1.y;
 
-
-  while (cur_point_x != p2.x && cur_point_y != p2.y)
-  {
-    mvprintw(cur_point_x, cur_point_y, POINT_CHAR);
-    cur_point_x++;
-    cur_point_y++;
-    refresh();
-  }
-
-  mvprintw(p1.x, p1.y, "O");
-  mvprintw(p2.x, p2.y, "O");
+  print_line(p1, p2);
 
 	refresh();
   getch();
@@ -49,3 +31,46 @@ int main()
 
 	return 0;
 }
+
+void print_line(struct point tmp_p1, struct point tmp_p2)
+{
+  int x0 = tmp_p1.x;
+  int y0 = tmp_p1.y;
+
+  int x1 = tmp_p2.x;
+  int y1 = tmp_p2.y;
+
+  // Delta
+
+  int deltax = abs(x1 - x0);
+  int deltay = abs(y1 - y0);
+
+  // Error
+
+  int error = 0;
+  int deltaerr = deltay + 1;
+
+  // Calc
+
+  int y = y0;
+  int diry = y1 - y0;
+
+  if (diry > 0) diry = 1;
+  if (diry < 0) diry = -1;
+
+  for (int tmp_x = x0; tmp_x <= x1; tmp_x++)
+  {
+    // plot(x, y)
+    error = error + deltaerr;
+    if (error >= (deltax + 1))
+    {
+      mvprintw(tmp_x, y, ".");
+      y = y + diry;
+      error = error - (deltax + 1);
+    }
+  }
+
+  mvprintw(tmp_p1.x, tmp_p1.y, "*");
+  mvprintw(tmp_p2.x, tmp_p2.y, "*");
+}
+

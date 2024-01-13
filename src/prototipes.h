@@ -1,10 +1,14 @@
 #ifndef PROTOTIPES_GUARDIAN
 #define PROTOTIPES_GUARDIAN
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <ncurses.h>
+struct point {
+    int x;
+    int y;
+
+    int connect[MAX_CONNECT];
+    int connections_count;
+};
+
+void print_line(struct point tmp_p1, struct point tmp_p2);
 
 #endif
