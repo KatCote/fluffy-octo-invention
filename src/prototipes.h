@@ -10,5 +10,6 @@ struct point {
 };
 
 void print_line(struct point tmp_p1, struct point tmp_p2);
+void print_points(struct point tmp_p1, struct point tmp_p2);
 
 #endif
