@@ -2,6 +2,8 @@
 #define PROTOTIPES_GUARDIAN
 
 struct point {
+    int number;
+    
     int x;
     int y;
 
