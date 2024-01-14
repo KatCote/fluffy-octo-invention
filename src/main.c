@@ -5,49 +5,35 @@
 int main()
 {
 	initscr();
+  curs_set(0);
 
   features();
 
-  struct point p1;
+  struct point test_plane[512];
 
-  p1.number = 1;
-  p1.x = 10;
-  p1.y = 10;
-  p1.connect[0] = 2;
-  p1.connect[1] = 4;
-  p1.connections_count = 2;
+  test_plane[0].number = 1;
+  test_plane[0].x = 10;
+  test_plane[0].y = 25;
 
-  struct point p2;
+  test_plane[1].number = 2;
+  test_plane[1].x = 35;
+  test_plane[1].y = 45;
 
-  p2.number = 2;
-  p2.x = 50;
-  p2.y = 20;
-  p2.connect[0] = 1;
-  p2.connect[1] = 3;
-  p2.connections_count = 2;
+  test_plane[2].number = 3;
+  test_plane[2].x = 60;
+  test_plane[2].y = 25;
 
-  struct point p3;
+  test_plane[3].number = 4;
+  test_plane[3].x = 35;
+  test_plane[3].y = 5;
 
-  p3.number = 3;
-  p3.x = 80;
-  p3.y = 10;
-  p3.connect[0] = 2;
-  p3.connect[1] = 4;
-  p3.connections_count = 2;
+  print_line(test_plane[0], test_plane[1]);
+  print_line(test_plane[1], test_plane[2]);
+  print_line(test_plane[2], test_plane[3]);
+  print_line(test_plane[3], test_plane[0]);
 
-  struct point p4;
-
-  p4.number = 4;
-  p4.x = 30;
-  p4.y = 5;
-  p4.connect[0] = 3;
-  p4.connect[1] = 1;
-  p4.connections_count = 2;
-
-  print_line(p1, p2);
-  print_line(p2, p3);
-  print_line(p3, p4);
-  print_line(p4, p1);
+  print_line(test_plane[0], test_plane[2]);
+  print_line(test_plane[3], test_plane[1]);
 
 	refresh();
   getch();
