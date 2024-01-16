@@ -9,31 +9,22 @@ int main()
 
   features();
 
-  struct point test_plane[512];
+  point plane[4];
+   
+  plane[0] = set_point(10, 25, 1);
+  plane[1] = set_point(35, 45, 2);
+  plane[2] = set_point(60, 25, 3);
+  plane[3] = set_point(35, 5, 4);
 
-  test_plane[0].number = 1;
-  test_plane[0].x = 10;
-  test_plane[0].y = 25;
+  set_line(&plane[0], &plane[1]);
+  set_line(&plane[1], &plane[2]);
+  set_line(&plane[2], &plane[3]);
+  set_line(&plane[3], &plane[0]);
 
-  test_plane[1].number = 2;
-  test_plane[1].x = 35;
-  test_plane[1].y = 45;
+  set_line(&plane[0], &plane[2]);
+  set_line(&plane[3], &plane[1]);
 
-  test_plane[2].number = 3;
-  test_plane[2].x = 60;
-  test_plane[2].y = 25;
-
-  test_plane[3].number = 4;
-  test_plane[3].x = 35;
-  test_plane[3].y = 5;
-
-  print_line(test_plane[0], test_plane[1]);
-  print_line(test_plane[1], test_plane[2]);
-  print_line(test_plane[2], test_plane[3]);
-  print_line(test_plane[3], test_plane[0]);
-
-  print_line(test_plane[0], test_plane[2]);
-  print_line(test_plane[3], test_plane[1]);
+  render_lines(4, plane);
 
 	refresh();
   getch();
@@ -42,7 +33,49 @@ int main()
 	return 0;
 }
 
-void print_line(struct point tmp_p1, struct point tmp_p2)
+void render_lines(int arr_size, point arr[])
+{
+  for (int current_point_number = 0; current_point_number < arr_size; current_point_number++)
+  {
+    point current_point = arr[current_point_number];
+    
+    for (int current_connection_number = 0; current_connection_number < current_point.connections_count; current_connection_number++)
+    {
+      if ( current_point.number >= arr[current_point.connection[current_connection_number]].number )
+      { print_line(current_point, arr[current_connection_number]); }
+    }
+  }
+}
+
+point set_point(int x0, int y0, int number)
+{
+  point tmp_point;
+
+  tmp_point.number = number;
+  tmp_point.x = x0;
+  tmp_point.y = y0;
+
+  tmp_point.connections_count = 0;
+
+  for (int tmp_con = 0; tmp_con < MAX_CONNECT; tmp_con++)
+  { tmp_point.connection[tmp_con] = 0; }
+
+  return tmp_point;
+}
+
+void set_line(point* tmp_p1, point* tmp_p2)
+{
+  if (tmp_p1->connections_count + 1 >= MAX_CONNECT) { return; }
+  else { tmp_p1->connections_count += 1; }
+
+  if (tmp_p2->connections_count + 1 >= MAX_CONNECT) { return; }
+  else { tmp_p2->connections_count += 1; }
+
+  tmp_p1->connection[tmp_p1->connections_count - 1] = tmp_p2->number;
+  tmp_p2->connection[tmp_p2->connections_count - 1] = tmp_p1->number;
+}
+
+void print_line(point tmp_p1, point tmp_p2)
 {
   int x0 = tmp_p1.x; int tmp_x0 = x0;
   int y0 = tmp_p1.y; int tmp_y0 = y0;
@@ -60,13 +93,13 @@ void print_line(struct point tmp_p1, struct point tmp_p2)
     {
       if (tmp_y0 > tmp_y1) mvprintw(y0, x0, ULDR_LINE_CHAR);
       else if (tmp_y0 < tmp_y1) mvprintw(y0, x0, URDL_LINE_CHAR);
-      else if (tmp_y0 == tmp_y1)  mvprintw(y0, x0, LR_LINE_CHAR);
+      else if (tmp_y0 == tmp_y1) mvprintw(y0, x0, LR_LINE_CHAR);
     }
     else if (tmp_x1 > tmp_x0)
     {
       if (tmp_y0 > tmp_y1) mvprintw(y0, x0, URDL_LINE_CHAR);
       else if (tmp_y0 < tmp_y1) mvprintw(y0, x0, ULDR_LINE_CHAR);
-      else if (tmp_y0 == tmp_y1)  mvprintw(y0, x0, LR_LINE_CHAR);
+      else if (tmp_y0 == tmp_y1) mvprintw(y0, x0, LR_LINE_CHAR);
     }
     else if (tmp_x0 == tmp_x1)
     {
@@ -83,7 +116,7 @@ void print_line(struct point tmp_p1, struct point tmp_p2)
   print_points(tmp_p1, tmp_p2);
 }
 
-void print_points(struct point tmp_p1, struct point tmp_p2)
+void print_points(point tmp_p1, point tmp_p2)
 {
   #ifdef DEV_MODE
   mvprintw(tmp_p1.y, tmp_p1.x, "(%d)", tmp_p1.number);
@@ -99,6 +132,7 @@ void features()
   short int info_num = 0;
 
   mvprintw(info_num, 0, "OS: ");
+
   #ifdef _WIN32
   mvprintw(info_num, 4, "_WIN32"); info_num++;
   #elif __APPLE__
@@ -108,8 +142,10 @@ void features()
   #else
   mvprintw(info_num, 4, "UNSUPPORTED"); info_num++;
   #endif
+
   mvprintw(info_num, 0, "Build: %s", BUILD_VER); info_num++;
   mvprintw(info_num, 0, "Color support: %s", has_colors() ? "true" : "false"); info_num++;
+  
   #ifdef DEV_MODE // Last
   mvprintw(info_num, 0, "DEV_MODE_ENABLED"); info_num++;
   #endif
