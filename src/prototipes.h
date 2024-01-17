@@ -19,8 +19,8 @@ void features();
 
 void render_single_line(point* input_p1, point* input_p2);
 void render_single_point(point* tmp_p1);
-void render_connection_lines(int arr_size, point tmp_point_arr[], bool show_points);
-void render_connection_points(int arr_size, point tmp_point_arr[]);
+void render_connection_lines(int arr_size, point* tmp_point_arr, bool show_points);
+void render_connection_points(int arr_size, point* tmp_point_arr);
 
 // Point
 

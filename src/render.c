@@ -2,7 +2,7 @@
 #include "defines.h"
 #include "prototipes.h"
 
-void render_connection_lines(int arr_size, point tmp_point_arr[], bool show_points)
+void render_connection_lines(int arr_size, point* tmp_point_arr, bool show_points)
 {
   for (int first_counter = 0; first_counter < arr_size; first_counter++)
   {
@@ -19,7 +19,7 @@ void render_connection_lines(int arr_size, point tmp_point_arr[], bool show_poin
   { render_connection_points(arr_size, tmp_point_arr); }
 }
 
-void render_connection_points(int arr_size, point tmp_point_arr[])
+void render_connection_points(int arr_size, point* tmp_point_arr)
 {
   for (int counter = 0; counter < arr_size; counter++)
   {
