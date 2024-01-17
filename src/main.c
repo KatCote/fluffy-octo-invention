@@ -23,7 +23,7 @@ int main()
   add_connection_ptp(&plane[1], &plane[3]); // 2 - 4
   add_connection_ptp(&plane[3], &plane[0]); // 4 - 1
 
-  render_connection_lines(5, plane);
+  render_connection_lines(5, plane, true);
 
   //check_point_info(&plane[0]);
 

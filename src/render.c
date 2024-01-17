@@ -2,7 +2,7 @@
 #include "defines.h"
 #include "prototipes.h"
 
-void render_connection_lines(int arr_size, point tmp_point_arr[])
+void render_connection_lines(int arr_size, point tmp_point_arr[], bool show_points)
 {
   for (int first_counter = 0; first_counter < arr_size; first_counter++)
   {
@@ -10,9 +10,13 @@ void render_connection_lines(int arr_size, point tmp_point_arr[])
     for (int second_counter = 0; second_counter < tmp_p1.connections_count; second_counter++)
     {
       point tmp_p2 = tmp_point_arr[tmp_p1.connection[second_counter]];
-      render_single_line(&tmp_p1, &tmp_p2);
+      if (tmp_p1.number < tmp_p2.number)
+      { render_single_line(&tmp_p1, &tmp_p2); }
     }
   }
+
+  if (show_points == true)
+  { render_connection_points(arr_size, tmp_point_arr); }
 }
 
 void render_connection_points(int arr_size, point tmp_point_arr[])
