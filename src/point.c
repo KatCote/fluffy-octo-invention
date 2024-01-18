@@ -40,6 +40,7 @@ void add_connection_ptp(point* tmp_point_1, point* tmp_point_2) // Point To Poin
   tmp_point_2->connection[tmp_point_2->connections_count] = tmp_point_1->number;
   tmp_point_1->connections_count = tmp_point_1->connections_count + 1;
   tmp_point_2->connections_count = tmp_point_2->connections_count + 1;
+
 }
 
 void check_point_info(point* tmp_point)

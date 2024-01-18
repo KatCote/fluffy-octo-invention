@@ -2,6 +2,9 @@
 #define DEFINES_GUARIAN
 
 #define MAX_CONNECT 128
+#define MAX_POINTS 8
+#define MAX_NAME 64
+
 #define POINT_CHAR "X"
 #define UD_LINE_CHAR "|"
 #define LR_LINE_CHAR "-"

@@ -8,11 +8,11 @@ if cd target/
 then
 cd ..
 else
-echo "\ncreating target/"
+echo "\ncreating ${RED}target/${NC} directory"
 mkdir target
 fi
 
-if clang -o target/fluffy.out src/main.c src/render.c src/point.c -lncurses
+if clang -o target/fluffy.out src/main.c src/render.c src/point.c src/plane.c -lncurses
 then
 	echo "\n${GREEN}Compile Successful${NC}\n"
 	chmod +x target/fluffy.out
