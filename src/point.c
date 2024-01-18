@@ -53,6 +53,3 @@ void check_point_info(point* tmp_point)
     ( 8, 5 + tmp_check_counter * 5, "%d[%d]\t", tmp_check_counter, tmp_point->connection[tmp_check_counter] );
   }
 }
-
-int get_connection(point* tmp_point, int connection_number)
-{ return tmp_point->connection[connection_number]; }
