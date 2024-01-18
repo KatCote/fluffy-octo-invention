@@ -18,7 +18,7 @@ int main()
   triangle.origin_x = 0;
   triangle.origin_y = 0;
 
-  point p1 = new_point(35, 5, 0);
+  point p1 = new_point(45, 5, 0);
   point p2 = new_point(35, 30, 0);
   point p3 = new_point(10, 30, 0);
 
@@ -29,6 +29,8 @@ int main()
   add_connection_ptp(triangle.point_array[0], triangle.point_array[1]);
   add_connection_ptp(triangle.point_array[1], triangle.point_array[2]);
   add_connection_ptp(triangle.point_array[2], triangle.point_array[0]);
+
+  base_fill(triangle.point_array[0], triangle.point_array[1], triangle.point_array[2]);
 
   render_plane(&triangle, true);
 

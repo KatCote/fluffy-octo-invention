@@ -34,19 +34,19 @@ void render_plane(plane* tmp_plane, bool show_points)
         if (tmp_p1->number < tmp_p2->number)
         { render_single_line(tmp_p1, tmp_p2, tmp_plane->origin_x, tmp_plane->origin_y); }
     }
-  }
+  } 
 
   if (show_points == true)
   { 
     for (int counter = 0; counter < tmp_plane->points_count; counter++)
     {
         #ifdef DEV_MODE
-        mvprintw(tmp_plane->point_array[counter]->y + tmp_plane->origin_y, tmp_plane->point_array[counter]->x + tmp_plane->origin_x,
+        mvprintw(tmp_plane->point_array[counter]->y + tmp_plane->origin_y,tmp_plane->point_array[counter]->x + tmp_plane->origin_x,
         "(%d)",
         tmp_plane->point_array[counter]->number);
         #else
-        mvprintw(
-            tmp_plane->point_array[counter]->y + tmp_plane->origin_y, tmp_plane->point_array[counter]->x + tmp_plane->origin_x, POINT_CHAR);
+        mvprintw(tmp_plane->point_array[counter]->y + tmp_plane->origin_y,tmp_plane->point_array[counter]->x + tmp_plane->origin_x,
+        POINT_CHAR);
         #endif
     }
   }

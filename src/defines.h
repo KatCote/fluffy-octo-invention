@@ -6,8 +6,9 @@
 #define MAX_NAME 64
 
 #define POINT_CHAR "X"
+#define FILL_CHAR '#'
 #define UD_LINE_CHAR "|"
-#define LR_LINE_CHAR "-"
+#define LR_LINE_CHAR "="
 #define ULDR_LINE_CHAR "\\"
 #define URDL_LINE_CHAR "/"
 

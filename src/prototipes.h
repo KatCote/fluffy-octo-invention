@@ -13,7 +13,12 @@ typedef struct {
     
 } point;
 
-typedef struct {} line; // - will be soon
+typedef struct {
+
+    point* first_point;
+    point* second_point;
+
+} line; // - will be soon
 
 typedef struct {
 
@@ -59,5 +64,9 @@ void add_connection_ptp(point* tmp_point_1, point* tmp_point_2);
 void push_point(plane* tmp_plane, point* tmp_point, bool reset_chords, bool reset_connections);
 
 point* get_point(plane* tmp_plane, int point_num);
+
+// Core
+
+void base_fill(point* tmp_p1, point* tmp_p2, point* tmp_p3);
 
 #endif
