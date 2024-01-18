@@ -41,12 +41,12 @@ void render_plane(plane* tmp_plane, bool show_points)
     for (int counter = 0; counter < tmp_plane->points_count; counter++)
     {
         #ifdef DEV_MODE
-        mvprintw(tmp_plane->point_array[counter]->y + offset_y, tmp_plane->point_array[counter]->x + offset_x,
-        "(%d)",
-        *tmp_plane->point_array[counter]->number);
-        #else
         mvprintw(tmp_plane->point_array[counter]->y + tmp_plane->origin_y, tmp_plane->point_array[counter]->x + tmp_plane->origin_x,
-        POINT_CHAR);
+        "(%d)",
+        tmp_plane->point_array[counter]->number);
+        #else
+        mvprintw(
+            tmp_plane->point_array[counter]->y + tmp_plane->origin_y, tmp_plane->point_array[counter]->x + tmp_plane->origin_x, POINT_CHAR);
         #endif
     }
   }
