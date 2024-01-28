@@ -88,7 +88,31 @@ void render_single_line(point* input_p1, point* input_p2, int offset_x, int offs
   int dy = -abs (y1 - y0), sy = y0 < y1 ? 1 : -1; 
   int err = dx + dy, e2 = 0; /* error value e_xy */
  
-  mvprintw(10,2,"x0:%d y0:%d x1:%d y1:%d", x0, y0, x1, y1);
+  for (int tmp_counter = 0;;tmp_counter++)
+  {
+    if (tmp_x0 > tmp_x1)
+    {
+      if (tmp_y0 > tmp_y1) mvprintw(y0, x0, ULDR_LINE_CHAR);
+      else if (tmp_y0 < tmp_y1) mvprintw(y0, x0, URDL_LINE_CHAR);
+      else if (tmp_y0 == tmp_y1) mvprintw(y0, x0, LR_LINE_CHAR);
+    }
+    else if (tmp_x1 > tmp_x0)
+    {
+      if (tmp_y0 > tmp_y1) mvprintw(y0, x0, URDL_LINE_CHAR);
+      else if (tmp_y0 < tmp_y1) mvprintw(y0, x0, ULDR_LINE_CHAR);
+      else if (tmp_y0 == tmp_y1) mvprintw(y0, x0, LR_LINE_CHAR);
+    }
+    else if (tmp_x0 == tmp_x1)
+    {
+      if (tmp_y0 != tmp_y1)  mvprintw(y0, x0, UD_LINE_CHAR);
+      if (tmp_y0 == tmp_y1)  break;
+    }
+
+    if (x0 == x1 && y0 == y1) break;
+    e2 = 2 * err;
+    if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
+    if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
+  }
 }
 
 void features()
