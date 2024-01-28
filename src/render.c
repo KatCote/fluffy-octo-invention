@@ -52,14 +52,14 @@ void render_plane(plane* tmp_plane, bool show_points)
   }
 }
 
-void render_connection_points(int arr_size, point* tmp_point_arr, int offest_x, int offset_y)
+void render_connection_points(int arr_size, point* tmp_point_arr, int offset_x, int offset_y)
 {
   for (int counter = 0; counter < arr_size; counter++)
   {
     #ifdef DEV_MODE
     mvprintw(tmp_point_arr[counter].y + offset_y, tmp_point_arr[counter].x + offest_x, "(%d)", tmp_point_arr[counter].number);
      #else
-    mvprintw(tmp_point_arr[counter].y + offset_y, tmp_point_arr[counter].x + offest_x, POINT_CHAR);
+    mvprintw(tmp_point_arr[counter].y + offset_y, tmp_point_arr[counter].x + offset_x, POINT_CHAR);
     #endif
   }
 }
