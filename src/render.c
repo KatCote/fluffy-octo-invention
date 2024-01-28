@@ -88,7 +88,7 @@ void render_single_line(point* input_p1, point* input_p2, int offset_x, int offs
   int dy = -abs (y1 - y0), sy = y0 < y1 ? 1 : -1; 
   int err = dx + dy, e2 = 0; /* error value e_xy */
  
-  for (int tmp_counter = 0;;tmp_counter++)
+  for (;;)
   {
     if (tmp_x0 > tmp_x1)
     {
