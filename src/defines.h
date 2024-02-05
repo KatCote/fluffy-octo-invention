@@ -16,4 +16,11 @@
 
 //#define DEV_MODE
 
+#define check_ret(try_func) \
+{ \
+    int ret; \
+    if((ret = try_func)) \
+    { return ret; } \
+}
+
 #endif

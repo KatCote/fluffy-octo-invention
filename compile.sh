@@ -12,7 +12,7 @@ echo "\ncreating ${RED}target/${NC} directory"
 mkdir target
 fi
 
-if clang -o target/fluffy.out src/main.c src/render.c src/point.c src/plane.c src/core.c -lncurses
+if clang -o target/fluffy.out src/main.c src/cli.c src/render.c src/point.c src/plane.c src/core.c -lncurses
 then
 	echo "\n${GREEN}Compile Successful${NC}\n"
 	chmod +x target/fluffy.out

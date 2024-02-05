@@ -39,6 +39,14 @@ typedef struct {
     
 } plane;
 
+// CLI
+
+int init_cli(void);
+int enter_cli(void);
+int exit_cli(void);
+
+int session_cli(void);
+
 void features();
 
 // Render
