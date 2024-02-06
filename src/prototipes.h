@@ -10,19 +10,15 @@ typedef struct {
 
     int connection[MAX_CONNECT];
     int connections_count;
+
+    int current_array;
     
 } point;
 
 typedef struct {
 
-    point* first_point;
-    point* second_point;
-
-} line; // - will be soon
-
-typedef struct {
-
-    char plane_name[MAX_NAME];
+    char plane_name[MAX_PLANE_NAME];
+    int plane_number;
 
     bool fill_plane;
 
@@ -33,9 +29,6 @@ typedef struct {
 
     point* point_array[MAX_POINTS];
     int points_count;
-
-    // line line_array[MAX_LINES]; - will be soon / or line pairs
-    // int lines_count;
     
 } plane;
 
