@@ -129,11 +129,31 @@ int session_cli(void)
         istr = strtok(input_str, command_parts);
 
         if (istr == NULL) { continue; }
-        if (!strcmp(istr, "exit")) { return 0; }
+        else if (!strcmp(istr, "exit")) { return 0; }
 
-        if (!strcmp(istr, "plane"))
+        else if (!strcmp(istr, "help"))
         {
             istr = strtok (NULL, command_parts);
+            if(istr == NULL) { goto default_help; }
+
+            char * istr_arg = strtok (NULL, command_parts);
+
+            if(!strcmp(istr, "plane")) { help(istr_arg, 1); }
+            else if(!strcmp(istr, "system-info")) { help(istr_arg, 2); }
+            else if(!strcmp(istr, "dev-mode")) { help(istr_arg, 3); }
+
+            else
+            {
+                default_help:
+
+                help(NULL, 0);
+            }
+        }
+
+        else if (!strcmp(istr, "plane"))
+        {
+            istr = strtok (NULL, command_parts);
+
             if (istr == NULL)
             { goto default_cli_plane; }
 
@@ -163,7 +183,7 @@ int session_cli(void)
                 wait_press_any_key continue;
             }
 
-            if (!strcmp(istr, "add")) // TODO
+            else if (!strcmp(istr, "add")) // TODO
             {
                 /* Planes Array */
 
@@ -194,38 +214,174 @@ int session_cli(void)
 
             }
 
+            else if (!strcmp(istr, "delete"))
+            {
+                goto default_cli_plane;
+            }
+
+            else if (!strcmp(istr, "select"))
+            {
+                goto default_cli_plane;
+            }
+
             else
             {
                 default_cli_plane:
-
-                mvprintw(size.ws_row - 2, 1, "plane");
-                mvprintw(size.ws_row - 1, 1, "\tadd [NAME] [X] [Y]\t| delete [ID]\t| select [ID]\t| config [ID]\t| info [ID]\t| list");
-
-                wait_press_any_key continue;
-            }
-
-            if (!strcmp(istr, "delete"))
-            {
                 
-            }
-
-            if (!strcmp(istr, "select"))
-            {
-                
+                help(NULL, 1);
             }
         }
 
-        //while (istr != NULL)
-        //{ istr = strtok (NULL, command_parts); }
+        else if (!strcmp(istr, "system-info"))
+        {
+            istr = strtok (NULL, command_parts);
+            if (istr == NULL)
+            { goto default_cli_system_info; }
 
+            else if (!strcmp(istr, "enable"))
+            { goto default_cli_system_info; }
+
+            else if (!strcmp(istr, "disable"))
+            { goto default_cli_system_info; }
+
+            else if (!strcmp(istr, "export"))
+            { goto default_cli_system_info; }
+
+            else
+            {
+                default_cli_system_info:
+
+                help(NULL, 2);
+            }
+        }
+
+        else if (!strcmp(istr, "dev-mode"))
+        {
+            istr = strtok (NULL, command_parts);
+            if (istr == NULL)
+            {
+                for (int tmp_col = 0; tmp_col < size.ws_col; tmp_col++)
+                { mvaddch(size.ws_row - 1, tmp_col, ' '); }
+                mvprintw(size.ws_row - 1, 1, "TDB");
+                wait_press_any_key continue;
+            }
+            
+            else if (!strcmp(istr, "enable"))
+            {}
+
+            else if (!strcmp(istr, "disable"))
+            {}
+
+            else
+            {}
+        }
     }
 
     return 0;
 }
 
-void help(char * command_d) // _d only for developers
+void help(char * command_d, int type_d) // _d only for developers
 {
+    struct winsize size;
+    if (ioctl(0, TIOCGWINSZ, (char *) &size) < 0)
+    printf("TIOCGWINSZ error");
 
+    for (int tmp_col = 0; tmp_col < size.ws_col; tmp_col++)
+    { mvaddch(size.ws_row - 1, tmp_col, ' '); }
+
+    switch (type_d)
+    {
+        case 0: // DEFAULT HELP
+            mvprintw(size.ws_row - 1, 1, "TBD");
+
+            break;
+
+        case 1: // PLANE
+            
+            if (command_d == NULL)
+            { goto help_plane_default; }
+
+            else if (!strcmp(command_d, "add"))
+            {
+                mvprintw(size.ws_row - 2, 1, "plane-add");
+                mvprintw(size.ws_row - 1, 1, "\tadd [NAME] [X] [Y]");
+            }
+
+            else if (!strcmp(command_d, "delete"))
+            { goto help_plane_default; }
+
+            else if (!strcmp(command_d, "select"))
+            { goto help_plane_default; }
+
+            else if (!strcmp(command_d, "config"))
+            { goto help_plane_default; }
+
+            else if (!strcmp(command_d, "list"))
+            { goto help_plane_default; }
+
+            else if (!strcmp(command_d, "info"))
+            { goto help_plane_default; }
+
+            else
+            {
+                help_plane_default:
+
+                mvprintw(size.ws_row - 2, 1, "plane");
+                mvprintw(size.ws_row - 1, 1, "\tadd [NAME] [X] [Y]\t| delete [ID]\t| select [ID]\t| config [ID]\t| info [ID]\t| list");
+            }
+
+            break;
+
+        case 2: // SYSTEM-INFO
+
+            if (command_d == NULL)
+            { goto help_system_info_default; }
+
+            else if (!strcmp(command_d, "enable"))
+            { goto help_system_info_default; }
+
+            else if (!strcmp(command_d, "disable"))
+            { goto help_system_info_default; }
+
+            else if (!strcmp(command_d, "export"))
+            { goto help_system_info_default; }
+
+            else
+            {
+                help_system_info_default:
+
+                mvprintw(size.ws_row - 2, 1, "system-info");
+                mvprintw(size.ws_row - 1, 1, "\tTBD");
+            }
+
+            break;
+
+        case 3: // DEV-MODE
+
+            if (command_d == NULL)
+            { goto help_dev_mode_default; }
+
+            else if (!strcmp(command_d, "enable"))
+            { goto help_dev_mode_default; }
+
+            else if (!strcmp(command_d, "disable"))
+            { goto help_dev_mode_default; }
+
+            else
+            {
+                help_dev_mode_default:
+
+                mvprintw(size.ws_row - 2, 1, "dev-mode");
+                mvprintw(size.ws_row - 1, 1, "\tTBD");
+            }
+
+            break;
+        
+        default:
+            break;
+    }
+
+    wait_press_any_key return;
 }
 
 void list(int type_d) // _d only for developers
