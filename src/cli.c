@@ -31,7 +31,7 @@ int enter_cli(void)
     }
 
     mvprintw(12, 1, "Choose action:");
-    mvprintw(14, 3, "New Guest Session");
+    mvprintw(14, 3, "New Session");
     mvprintw(15, 3, "Exit");
 
     short int choose = 0;
@@ -117,7 +117,7 @@ int session_cli(void)
         char *istr;
 
         for (int tmp_col = 0; tmp_col < size.ws_col; tmp_col++)
-        { mvaddch(size.ws_row - 2, tmp_col, '_'); mvaddch(size.ws_row - 1, tmp_col, ' '); }
+        { mvaddch(size.ws_row - 2, tmp_col, '-'); mvaddch(size.ws_row - 1, tmp_col, ' '); }
 
         mvprintw(size.ws_row - 1, 1, ">>> ");
         refresh();
@@ -134,12 +134,8 @@ int session_cli(void)
         if (!strcmp(istr, "plane"))
         {
             istr = strtok (NULL, command_parts);
-            if (istr == NULL || !strcmp(istr, "help"))
-            {
-                mvprintw(size.ws_row - 1, 1, "plane:\tadd [NAME] [ID] [X] [Y]\t| del [ID]\t| select [ID]\t| info [ID]\t| list");
-
-                wait_press_any_key continue;
-            }
+            if (istr == NULL)
+            { goto default_cli_plane; }
 
             if (!strcmp(istr, "list"))
             {
@@ -183,11 +179,21 @@ int session_cli(void)
                 /* Plane Name */
 
                 istr = strtok (NULL, command_parts);
-                if (istr == NULL) { strcpy(planes_arr[tmp_id].plane_name, "DEFAULT"); continue; }
+                if (istr == NULL) { strcpy(planes_arr[tmp_id].plane_name, "NO_NAME"); continue; }
 
                 strcpy(planes_arr[tmp_id].plane_name, istr);
 
                 continue;
+            }
+
+            else
+            {
+                default_cli_plane:
+
+                mvprintw(size.ws_row - 2, 1, "plane");
+                mvprintw(size.ws_row - 1, 1, "\tadd [NAME] [ID] [X] [Y]\t| delete [ID]\t| select [ID]\t| config [ID]\t| info [ID]\t| list");
+
+                wait_press_any_key continue;
             }
 
             if (!strcmp(istr, "delete"))
