@@ -155,7 +155,10 @@ int session_cli(void)
                     mvprintw(size.ws_row - 1, 1, "C:%d F:%d", planes_count, planes_current_free_id);
                 }
                 else
-                { mvprintw(size.ws_row - 1, 1, "NOT ENOUTH PLANES"); }
+                {
+                    mvprintw(size.ws_row - 2, 1, "error");
+                    mvprintw(size.ws_row - 1, 1, "\tthere is not a single plane. try \"plane add [name]\" or \"help\"");
+                }
 
                 wait_press_any_key continue;
             }
@@ -184,6 +187,11 @@ int session_cli(void)
                 strcpy(planes_arr[tmp_id].plane_name, istr);
 
                 continue;
+
+                /* Plane X Chord */
+
+                /* Plane Y Chord */
+
             }
 
             else
@@ -191,7 +199,7 @@ int session_cli(void)
                 default_cli_plane:
 
                 mvprintw(size.ws_row - 2, 1, "plane");
-                mvprintw(size.ws_row - 1, 1, "\tadd [NAME] [ID] [X] [Y]\t| delete [ID]\t| select [ID]\t| config [ID]\t| info [ID]\t| list");
+                mvprintw(size.ws_row - 1, 1, "\tadd [NAME] [X] [Y]\t| delete [ID]\t| select [ID]\t| config [ID]\t| info [ID]\t| list");
 
                 wait_press_any_key continue;
             }
@@ -212,6 +220,49 @@ int session_cli(void)
 
     }
 
+    return 0;
+}
+
+void help(char * command_d) // _d only for developers
+{
+
+}
+
+void list(int type_d) // _d only for developers
+{
+    /*
+    TYPE:
+    0 - planes
+    1 - points
+    */
+}
+
+void info(int id, int type_d) // _d only for developers
+{
+    /*
+    TYPE:
+    0 - planes
+    1 - points
+    */
+}
+
+int add_plane(char name[], int x, int y)
+{
+    return 0;
+}
+
+int del_plane(int id)
+{
+    return 0;
+}
+
+int select_plane(int id)
+{
+    return 0;
+}
+
+int config_plane(int id)
+{
     return 0;
 }
 
