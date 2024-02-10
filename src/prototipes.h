@@ -43,7 +43,7 @@ int session_cli(void);
 void help(char * command_d, int type_d);
 void list(int type_d);
 void info(int id, int type_d);
-int add_plane(char name[], int x, int y);
+void add_plane(char * name, int x, int y);
 int del_plane(int id);
 int select_plane(int id);
 int config_plane(int id);

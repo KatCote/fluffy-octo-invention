@@ -168,9 +168,9 @@ int session_cli(void)
                 {
                     for (int p_id = 0; p_id < planes_count; p_id++)
                     {
-                        mvprintw(size.ws_row - 1, p_id * (MAX_PLANE_NAME + 6) + 11,
-                        "[%d: %s]",
-                        planes_id[p_id], planes_arr[p_id].plane_name);
+                        mvprintw(size.ws_row - 1, p_id * (MAX_PLANE_NAME + 20) + 11,
+                        "[%d: %s | %d | %d]",
+                        planes_id[p_id], planes_arr[p_id].plane_name, planes_arr[p_id].origin_x, planes_arr[p_id].origin_y);
                     }
                     mvprintw(size.ws_row - 1, 1, "C:%d F:%d", planes_count, planes_current_free_id);
                 }
@@ -185,33 +185,16 @@ int session_cli(void)
 
             else if (!strcmp(istr, "add")) // TODO
             {
-                /* Planes Array */
-
-                planes_count += 1;
-
-                /* Plane ID */
-
-                int tmp_id = planes_current_free_id;
-
-                planes_id[tmp_id] = tmp_id;
-                planes_arr[tmp_id].plane_number = tmp_id;
-
-                for (int check_free_id = 0; check_free_id <= planes_count; check_free_id++)
-                { if (planes_id[check_free_id] == -1) { planes_current_free_id = check_free_id; break; } }
-
-                /* Plane Name */
-
                 istr = strtok (NULL, command_parts);
-                if (istr == NULL) { strcpy(planes_arr[tmp_id].plane_name, "NO_NAME"); continue; }
+                int arg_x, arg_y;
 
-                strcpy(planes_arr[tmp_id].plane_name, istr);
+                char * tmp_arg_1 = strtok (NULL, command_parts);
+                if (tmp_arg_1 != NULL) { arg_x = atoi(tmp_arg_1); } else { arg_x = 0; }
 
-                continue;
+                char * tmp_arg_2 = strtok (NULL, command_parts);
+                if (tmp_arg_2 != NULL) { arg_y = atoi(tmp_arg_2); } else { arg_y = 0; }
 
-                /* Plane X Chord */
-
-                /* Plane Y Chord */
-
+                add_plane(istr, arg_x, arg_y);
             }
 
             else if (!strcmp(istr, "delete"))
@@ -302,10 +285,7 @@ void help(char * command_d, int type_d) // _d only for developers
             { goto help_plane_default; }
 
             else if (!strcmp(command_d, "add"))
-            {
-                mvprintw(size.ws_row - 2, 1, "plane-add");
-                mvprintw(size.ws_row - 1, 1, "\tadd [NAME] [X] [Y]");
-            }
+            { goto help_plane_default; }
 
             else if (!strcmp(command_d, "delete"))
             { goto help_plane_default; }
@@ -402,9 +382,36 @@ void info(int id, int type_d) // _d only for developers
     */
 }
 
-int add_plane(char name[], int x, int y)
+void add_plane(char * name, int x, int y)
 {
-    return 0;
+    
+    /* Planes Array */
+
+    planes_count += 1;
+
+    /* Plane ID */
+
+    int tmp_id = planes_current_free_id;
+
+    planes_id[tmp_id] = tmp_id;
+    planes_arr[tmp_id].plane_number = tmp_id;
+
+    for (int check_free_id = 0; check_free_id <= planes_count; check_free_id++)
+    { if (planes_id[check_free_id] == -1) { planes_current_free_id = check_free_id; } }
+
+    /* Plane Name */
+
+    if (name == NULL) { strcpy(planes_arr[tmp_id].plane_name, "NO_NAME"); }
+
+    else { strcpy(planes_arr[tmp_id].plane_name, name); }
+
+    /* Plane X Chord */
+
+    planes_arr[tmp_id].origin_x = x;
+
+    /* Plane Y Chord */
+
+    planes_arr[tmp_id].origin_y = y;
 }
 
 int del_plane(int id)
