@@ -129,6 +129,7 @@ int session_cli(void)
         istr = strtok(input_str, command_parts);
 
         if (istr == NULL) { continue; }
+        
         else if (!strcmp(istr, "exit")) { return 0; }
 
         else if (!strcmp(istr, "help"))
@@ -143,11 +144,9 @@ int session_cli(void)
             else if(!strcmp(istr, "dev-mode")) { help(istr_arg, 3); }
 
             else
-            {
-                default_help:
+            { default_help: help(NULL, 0); }
 
-                help(NULL, 0);
-            }
+            wait_press_any_key continue;
         }
 
         else if (!strcmp(istr, "plane"))
@@ -158,30 +157,7 @@ int session_cli(void)
             { goto default_cli_plane; }
 
             if (!strcmp(istr, "list"))
-            {
-                for (int tmp_col = 0; tmp_col < size.ws_col; tmp_col++)
-                { mvaddch(size.ws_row - 1, tmp_col, ' '); }
-
-                //mvprintw(size.ws_row - 1, 1, "COUNT: %d\tACTIVE: %d", planes_count, planes_active);
-
-                if (planes_count > 0)
-                {
-                    for (int p_id = 0; p_id < planes_count; p_id++)
-                    {
-                        mvprintw(size.ws_row - 1, p_id * (MAX_PLANE_NAME + 20) + 11,
-                        "[%d: %s | %d | %d]",
-                        planes_id[p_id], planes_arr[p_id].plane_name, planes_arr[p_id].origin_x, planes_arr[p_id].origin_y);
-                    }
-                    mvprintw(size.ws_row - 1, 1, "C:%d F:%d", planes_count, planes_current_free_id);
-                }
-                else
-                {
-                    mvprintw(size.ws_row - 2, 1, "error");
-                    mvprintw(size.ws_row - 1, 1, "\tthere is not a single plane. try \"plane add [name]\" or \"help\"");
-                }
-
-                wait_press_any_key continue;
-            }
+            { list(0); continue; }
 
             else if (!strcmp(istr, "add")) // TODO
             {
@@ -195,23 +171,20 @@ int session_cli(void)
                 if (tmp_arg_2 != NULL) { arg_y = atoi(tmp_arg_2); } else { arg_y = 0; }
 
                 add_plane(istr, arg_x, arg_y);
+                
+                continue;
             }
 
             else if (!strcmp(istr, "delete"))
-            {
-                goto default_cli_plane;
-            }
+            { goto default_cli_plane; }
 
             else if (!strcmp(istr, "select"))
-            {
-                goto default_cli_plane;
-            }
+            { goto default_cli_plane; }
 
             else
             {
-                default_cli_plane:
-                
-                help(NULL, 1);
+                default_cli_plane: help(NULL, 1);
+                wait_press_any_key continue;
             }
         }
 
@@ -263,8 +236,10 @@ int session_cli(void)
     return 0;
 }
 
-void help(char * command_d, int type_d) // _d only for developers
+void help(char * command_d, int type_d) // _d set by code, not user
 {
+    /* Current Screen Size */
+
     struct winsize size;
     if (ioctl(0, TIOCGWINSZ, (char *) &size) < 0)
     printf("TIOCGWINSZ error");
@@ -274,106 +249,183 @@ void help(char * command_d, int type_d) // _d only for developers
 
     switch (type_d)
     {
-        case 0: // DEFAULT HELP
-            mvprintw(size.ws_row - 1, 1, "TBD");
+    case 0: // DEFAULT HELP
+        mvprintw(size.ws_row - 1, 1, "TBD");
 
-            break;
+        return;
 
-        case 1: // PLANE
-            
-            if (command_d == NULL)
-            { goto help_plane_default; }
-
-            else if (!strcmp(command_d, "add"))
-            { goto help_plane_default; }
-
-            else if (!strcmp(command_d, "delete"))
-            { goto help_plane_default; }
-
-            else if (!strcmp(command_d, "select"))
-            { goto help_plane_default; }
-
-            else if (!strcmp(command_d, "config"))
-            { goto help_plane_default; }
-
-            else if (!strcmp(command_d, "list"))
-            { goto help_plane_default; }
-
-            else if (!strcmp(command_d, "info"))
-            { goto help_plane_default; }
-
-            else
-            {
-                help_plane_default:
-
-                mvprintw(size.ws_row - 2, 1, "plane");
-                mvprintw(size.ws_row - 1, 1, "\tadd [NAME] [X] [Y]\t| delete [ID]\t| select [ID]\t| config [ID]\t| info [ID]\t| list");
-            }
-
-            break;
-
-        case 2: // SYSTEM-INFO
-
-            if (command_d == NULL)
-            { goto help_system_info_default; }
-
-            else if (!strcmp(command_d, "enable"))
-            { goto help_system_info_default; }
-
-            else if (!strcmp(command_d, "disable"))
-            { goto help_system_info_default; }
-
-            else if (!strcmp(command_d, "export"))
-            { goto help_system_info_default; }
-
-            else
-            {
-                help_system_info_default:
-
-                mvprintw(size.ws_row - 2, 1, "system-info");
-                mvprintw(size.ws_row - 1, 1, "\tTBD");
-            }
-
-            break;
-
-        case 3: // DEV-MODE
-
-            if (command_d == NULL)
-            { goto help_dev_mode_default; }
-
-            else if (!strcmp(command_d, "enable"))
-            { goto help_dev_mode_default; }
-
-            else if (!strcmp(command_d, "disable"))
-            { goto help_dev_mode_default; }
-
-            else
-            {
-                help_dev_mode_default:
-
-                mvprintw(size.ws_row - 2, 1, "dev-mode");
-                mvprintw(size.ws_row - 1, 1, "\tTBD");
-            }
-
-            break;
+    case 1: // PLANE
         
-        default:
-            break;
-    }
+        if (command_d == NULL)
+        { goto help_plane_default; }
 
-    wait_press_any_key return;
+        else if (!strcmp(command_d, "add"))
+        { goto help_plane_default; }
+
+        else if (!strcmp(command_d, "delete"))
+        { goto help_plane_default; }
+
+        else if (!strcmp(command_d, "select"))
+        { goto help_plane_default; }
+
+        else if (!strcmp(command_d, "config"))
+        { goto help_plane_default; }
+
+        else if (!strcmp(command_d, "list"))
+        { goto help_plane_default; }
+
+        else if (!strcmp(command_d, "info"))
+        { goto help_plane_default; }
+
+        else
+        {
+            help_plane_default:
+
+            mvprintw(size.ws_row - 2, 1, "plane");
+            mvprintw(size.ws_row - 1, 1, "\tadd [NAME] [X] [Y]\t| delete [ID]\t| select [ID]\t| config [ID]\t| info [ID]\t| list");
+        }
+
+        return;
+
+    case 2: // SYSTEM-INFO
+
+        if (command_d == NULL)
+        { goto help_system_info_default; }
+
+        else if (!strcmp(command_d, "enable"))
+        { goto help_system_info_default; }
+
+        else if (!strcmp(command_d, "disable"))
+        { goto help_system_info_default; }
+
+        else if (!strcmp(command_d, "export"))
+        { goto help_system_info_default; }
+
+        else
+        {
+            help_system_info_default:
+
+            mvprintw(size.ws_row - 2, 1, "system-info");
+            mvprintw(size.ws_row - 1, 1, "\tTBD");
+        }
+
+        return;
+
+    case 3: // DEV-MODE
+
+        if (command_d == NULL)
+        { goto help_dev_mode_default; }
+
+        else if (!strcmp(command_d, "enable"))
+        { goto help_dev_mode_default; }
+
+        else if (!strcmp(command_d, "disable"))
+        { goto help_dev_mode_default; }
+
+        else
+        {
+            help_dev_mode_default:
+
+            mvprintw(size.ws_row - 2, 1, "dev-mode");
+            mvprintw(size.ws_row - 1, 1, "\tTBD");
+        }
+
+        return;
+    
+    default: return;
+    }
 }
 
-void list(int type_d) // _d only for developers
+void list(/*int optional_id,*/int type_d) // _d set by code, not user
 {
     /*
     TYPE:
     0 - planes
     1 - points
     */
+
+   struct winsize size;
+    if (ioctl(0, TIOCGWINSZ, (char *) &size) < 0)
+    printf("TIOCGWINSZ error");
+
+   switch (type_d)
+   {
+        case 0: // PLANES
+        
+            for (int tmp_col = 0; tmp_col < size.ws_col; tmp_col++)
+            { mvaddch(size.ws_row - 1, tmp_col, ' '); }
+
+            //mvprintw(size.ws_row - 1, 1, "COUNT: %d\tACTIVE: %d", planes_count, planes_active);
+
+            if (planes_count > 0)
+            {
+                int p_id = 0;
+                char key = getch();
+
+                curs_set(0); 
+                noecho(); 
+
+                while (key != 'q')
+                {
+                    /* Choose next p_id */
+
+                    switch (key)
+                    {
+                    case 2: // ARROW UP
+                        if (p_id - 1 >= 0 && planes_id[p_id - 1] != -1)
+                            p_id -= 1;
+                        break;
+
+                    case 3: // ARROW DOWN
+                        if (p_id + 1 < MAX_PLANES && planes_id[p_id + 1] != -1)
+                            p_id += 1;
+                        break;
+                    
+                    default: break;
+                    }
+                    
+                    /* Clear output */
+
+                    for (int tmp_col = 0; tmp_col < size.ws_col; tmp_col++)
+                    { mvaddch(size.ws_row - 1, tmp_col, ' '); }
+
+                    mvprintw(size.ws_row - 2, 1, "plane-list");
+
+                    /* Base Info */
+
+                    mvprintw(size.ws_row - 1, 1, "COUNT: %d FREE_ID: %d", planes_count, planes_current_free_id);
+
+                    /* Current Plane Info */
+
+                    mvprintw(size.ws_row - 1, 25,
+                    "| ID: %d,  NAME: \"%s\", ORIGIN_X: %d, ORIGIN_Y: %d, POINTS: %d |",
+                    planes_id[p_id],
+                    planes_arr[p_id].plane_name,
+                    planes_arr[p_id].origin_x,
+                    planes_arr[p_id].origin_y,
+                    planes_arr[p_id].points_count);
+
+                    key = getch();
+                }
+
+                curs_set(2); 
+                echo();
+            }
+            else
+            {
+                mvprintw(size.ws_row - 2, 1, "error");
+                mvprintw(size.ws_row - 1, 1, "\tthere is not a single plane. try \"plane add [name]\" or \"help\"");
+
+                wait_press_any_key
+            }
+
+            return;
+        
+        default: return;
+   }
 }
 
-void info(int id, int type_d) // _d only for developers
+void info(int id, int type_d) // _d set by code, not user
 {
     /*
     TYPE:
@@ -384,7 +436,6 @@ void info(int id, int type_d) // _d only for developers
 
 void add_plane(char * name, int x, int y)
 {
-    
     /* Planes Array */
 
     planes_count += 1;
@@ -415,11 +466,6 @@ void add_plane(char * name, int x, int y)
 }
 
 int del_plane(int id)
-{
-    return 0;
-}
-
-int select_plane(int id)
 {
     return 0;
 }

@@ -45,7 +45,6 @@ void list(int type_d);
 void info(int id, int type_d);
 void add_plane(char * name, int x, int y);
 int del_plane(int id);
-int select_plane(int id);
 int config_plane(int id);
 
 void features();
