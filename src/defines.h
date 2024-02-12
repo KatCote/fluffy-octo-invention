@@ -5,6 +5,7 @@
 #define MAX_POINTS 8
 #define MAX_PLANES 4
 #define MAX_PLANE_NAME 8 // RECOMENDATION, NOT RULE (Just now)
+#define MAX_COMMAND_LEN 32
 
 #define POINT_CHAR "X"
 #define FILL_CHAR '#'

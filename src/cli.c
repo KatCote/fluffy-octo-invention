@@ -112,8 +112,8 @@ int session_cli(void)
 
         /* Render new Command Line */
 
-        char input_str[32];
-        char command_parts[16] = " ";
+        char input_str[MAX_COMMAND_LEN];
+        char command_parts[MAX_COMMAND_LEN] = " ";
         char *istr;
 
         for (int tmp_col = 0; tmp_col < size.ws_col; tmp_col++)
@@ -124,7 +124,12 @@ int session_cli(void)
 
         /* Command Parsing */
 
-        getstr(input_str);
+        char first_key = getch();
+
+        if (first_key == 3) { /*  ungetstr() TODO */ }
+
+        input_str[0] = first_key;
+        getstr(input_str + 1);
 
         istr = strtok(input_str, command_parts);
 
@@ -186,6 +191,8 @@ int session_cli(void)
                 default_cli_plane: help(NULL, 1);
                 wait_press_any_key continue;
             }
+            
+            continue;
         }
 
         else if (!strcmp(istr, "system-info"))
@@ -209,6 +216,8 @@ int session_cli(void)
 
                 help(NULL, 2);
             }
+
+            continue;
         }
 
         else if (!strcmp(istr, "dev-mode"))
@@ -230,7 +239,11 @@ int session_cli(void)
 
             else
             {}
+
+            continue;
         }
+
+        else { continue; }
     }
 
     return 0;
@@ -281,7 +294,7 @@ void help(char * command_d, int type_d) // _d set by code, not user
         {
             help_plane_default:
 
-            mvprintw(size.ws_row - 2, 1, "plane");
+            mvprintw(size.ws_row - 2, 1, "help:plane");
             mvprintw(size.ws_row - 1, 1, "\tadd [NAME] [X] [Y]\t| delete [ID]\t| select [ID]\t| config [ID]\t| info [ID]\t| list");
         }
 
@@ -360,7 +373,7 @@ void list(/*int optional_id,*/int type_d) // _d set by code, not user
             if (planes_count > 0)
             {
                 int p_id = 0;
-                char key = getch();
+                char key = '0';
 
                 curs_set(0); 
                 noecho(); 
@@ -478,6 +491,15 @@ int config_plane(int id)
 int exit_cli(void)
 {
     endwin();
+
+    return 0;
+}
+
+int ungetstr(char * str)
+{
+    if (str == NULL) { return 1; }
+
+    // TODO
 
     return 0;
 }
